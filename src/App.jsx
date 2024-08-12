@@ -7,11 +7,13 @@ import './App.css';
 
 const App = () => {
   const [starships, setStarships] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStarships = async () => {
       const data = await getStarships();
       setStarships(data.results);
+      setLoading(false);
     };
 
     fetchStarships();
@@ -23,6 +25,10 @@ const App = () => {
     );
     setStarships(filteredStarships);
   };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <main>
