@@ -7,12 +7,14 @@ import './App.css';
 
 const App = () => {
   const [starships, setStarships] = useState([]);
+  const [filteredStarships, setFilteredStarships] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStarships = async () => {
       const data = await getStarships();
       setStarships(data.results);
+      setFilteredStarships(data.results);
       setLoading(false);
     };
 
@@ -20,10 +22,10 @@ const App = () => {
   }, []);
 
   const handleSearch = (query) => {
-    const filteredStarships = starships.filter((ship) =>
+    const filtered = starships.filter((ship) =>
       ship.name.toLowerCase().includes(query.toLowerCase())
     );
-    setStarships(filteredStarships);
+    setFilteredStarships(filtered);
   };
 
   if (loading) {
@@ -32,8 +34,20 @@ const App = () => {
 
   return (
     <main>
-      <StarshipSearch onSearch={handleSearch} />
-      <StarshipList starships={starships} />
+      <header>
+        <h1>Star Wars API</h1>
+      </header>
+
+      <section>
+        <h2>Search</h2>
+        <StarshipSearch onSearch={handleSearch} />
+      </section>
+
+      <section>
+        <h2>Starships</h2>
+        <p>Number of results: {filteredStarships.length}</p>
+        <StarshipList starships={filteredStarships} />
+      </section>
     </main>
   );
 };
